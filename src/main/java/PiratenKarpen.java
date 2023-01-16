@@ -9,5 +9,4 @@ public class PiratenKarpen {
         System.out.println(myDice.roll());
         System.out.println("That's all folks!");
     }
-    
 }
