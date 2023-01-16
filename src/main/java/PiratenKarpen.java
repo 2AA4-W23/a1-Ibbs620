@@ -27,6 +27,7 @@ public class PiratenKarpen {
             }
             System.out.println("Player 2 scored " + P2.countPoints());
             System.out.print("Player ");
+
             if (P1.countPoints() > P2.countPoints()) {
                 P1Wins++;
                 System.out.println("1 wins the game");
