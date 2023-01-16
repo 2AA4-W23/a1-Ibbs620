@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Dice {
 
-    public Faces roll() {
+    public static Faces roll() {
         int howManyFaces = Faces.values().length;
         System.out.println("  (DEBUG) there are " + howManyFaces + " faces");
         System.out.println("  (DEBUG) " + Arrays.toString(Faces.values()));
@@ -13,7 +13,7 @@ public class Dice {
         return Faces.values()[bag.nextInt(howManyFaces)];
     }
 
-    public Faces[] rollEight() {
+    public static Faces[] rollEight() {
         int howManyFaces = Faces.values().length;
         Faces[] rolls = new Faces[8];
         Random bag = new Random();
@@ -24,4 +24,14 @@ public class Dice {
         return rolls;
     }
 
+    public static Faces[] rollN(int n) {
+        int howManyFaces = Faces.values().length;
+        Faces[] rolls = new Faces[n];
+        Random bag = new Random();
+        for (int i = 0; i < n; i++) {
+            int roll = bag.nextInt(howManyFaces);
+            rolls[i] = Faces.values()[roll];
+        }
+        return rolls;
+    }
 }

@@ -6,10 +6,13 @@ public class PiratenKarpen {
     public static void main(String[] args) {
         System.out.println("Welcome to Piraten Karpen Simulator!");
         System.out.println("I'm rolling eight dices");
-        Dice myDice = new Dice();
-        Faces[] rolls = myDice.rollEight();
-        for (Faces face : rolls)
+        Faces[] rolls = Dice.rollEight();
+        for (Faces face : rolls) {
             System.out.println(face);
+            if (face == Faces.SKULL) {
+                face = null;
+            }
+        }
         System.out.println("That's all folks!");
     }
 }
