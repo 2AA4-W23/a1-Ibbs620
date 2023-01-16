@@ -27,12 +27,12 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 
 ### Backlog
 
-| MVP? | Id  | Feature                                              | Status  | Started  | Delivered |
-| :--: | :-: | ---------------------------------------------------- | :-----: | :------: | :-------: |
-|  x   | F01 | Roll a dice                                          |    D    | 01/01/23 | 01/01/23  |
-|  x   | F02 | Roll eight dices                                     |    D    | 01/16/23 | 01/16/23  |
-|  x   | F03 | 42 games are simulated                               |    D    | 01/16/23 | 01/16/23  |
-|  x   | F04 | End of game with three skulls                        |    D    | 01/16/23 | 01/16/23  |
-|  x   | F05 | Player keeping random dice at their turn             |    D    | 01/16/23 | 01/16/23  |
-|  x   | F06 | Score points: 100 points for each diamond and gold   |    D    | 01/16/23 | 01/16/23  |
-|  x   | F07 | After 42 games, stdout win percentage of each player | B (F03) |          |
+| MVP? | Id  | Feature                                              | Status | Started  | Delivered |
+| :--: | :-: | ---------------------------------------------------- | :----: | :------: | :-------: |
+|  x   | F01 | Roll a dice                                          |   D    | 01/01/23 | 01/01/23  |
+|  x   | F02 | Roll eight dices                                     |   D    | 01/16/23 | 01/16/23  |
+|  x   | F03 | 42 games are simulated                               |   D    | 01/16/23 | 01/16/23  |
+|  x   | F04 | End of game with three skulls                        |   D    | 01/16/23 | 01/16/23  |
+|  x   | F05 | Player keeping random dice at their turn             |   D    | 01/16/23 | 01/16/23  |
+|  x   | F06 | Score points: 100 points for each diamond and gold   |   D    | 01/16/23 | 01/16/23  |
+|  x   | F07 | After 42 games, stdout win percentage of each player |   S    | 01/16/23 |
