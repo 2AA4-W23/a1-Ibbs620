@@ -36,13 +36,14 @@ public class Player {
     }
 
     public boolean[] selectReroll() {
+        Random r = new Random();
         boolean[] reroll = new boolean[8];
         this.skullsRolled = 0;
         for (int i = 0; i < this.totalDice; i++) {
             if (this.rolledDice[i] == Faces.SKULL) {
                 reroll[i] = false;
                 this.skullsRolled++;
-            } else if ((new Random()).nextInt(2) == 1)
+            } else if (r.nextInt(2) == 1)
                 reroll[i] = true;
             else
                 reroll[i] = false;
