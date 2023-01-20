@@ -63,7 +63,6 @@ public class Player {
     public void startTurn() {
         while (this.canRollAgain()) {
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
-            this.printRolls();
         }
     }
 

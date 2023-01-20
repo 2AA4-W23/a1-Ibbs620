@@ -35,7 +35,6 @@ public class Game {
         Player winner = new Player(0, null, 0);
         for (Player player : this.players) {
             player.startTurn();
-            System.out.println("Player " + player.playerNumber + " Points: " + player.countPoints());
             if (player.countPoints() > winner.countPoints()) {
                 winner = player;
             } else if (player.countPoints() == winner.countPoints()) {
