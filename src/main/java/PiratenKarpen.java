@@ -1,16 +1,28 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import pk.Game;
 import pk.Player;
 
 public class PiratenKarpen {
 
+    private static final Logger logger = LogManager.getRootLogger();
+
     public static void main(String[] args) {
         System.out.println("Welcome to Piraten Karpen Simulator!");
         int[] wins = new int[3]; // wins[0] reserved for counting ties
         for (int i = 1; i <= 42; i++) {
-            System.out.println("-----------------------------------------------");
-            Game game = new Game(2, 8);
+            boolean trace;
+            if (args.length == 0)
+                trace = false;
+            else
+                trace = args[0].equals("trace") || args[0].equals("t");
+
+            Game game = new Game(2, 8, trace);
             Player winner = game.playGame();
             wins[winner.playerNumber]++;
+            for (String msg : game.getLogMessages())
+                logger.info(msg);
         }
 
         System.out.println("-----------------------------------------------");

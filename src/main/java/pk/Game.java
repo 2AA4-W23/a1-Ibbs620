@@ -1,9 +1,13 @@
 package pk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
     private Player[] players;
     private int numberOfDice;
     private boolean trace;
+    private List<String> logMessages = new ArrayList<>();
 
     public Game(int numberOfPlayers, int numberOfDice, boolean trace) {
         this.numberOfDice = numberOfDice;
@@ -32,15 +36,34 @@ public class Game {
     }
 
     public Player playGame() {
+        if (trace) {
+            logMessages.add("STARTING GAME");
+        }
         Player winner = new Player(0, null, 0);
         for (Player player : this.players) {
-            player.startTurn();
+            if (trace) {
+                logMessages.add("PLAYER " + player.playerNumber + " TURN BEGINS");
+            }
+            List<String> turnSummary = player.startTurn();
+            if (trace) {
+                logMessages.addAll(turnSummary);
+            }
             if (player.countPoints() > winner.countPoints()) {
                 winner = player;
             } else if (player.countPoints() == winner.countPoints()) {
                 winner = new Player(0, null, 0);
             }
         }
+        if (trace && winner.playerNumber != 0) {
+            logMessages.add("PLAYER " + winner.playerNumber + "WINS");
+        }
+        if (trace && winner.playerNumber == 0) {
+            logMessages.add("GAME IS A TIE");
+        }
         return winner;
+    }
+
+    public List<String> getLogMessages() {
+        return this.logMessages;
     }
 }
