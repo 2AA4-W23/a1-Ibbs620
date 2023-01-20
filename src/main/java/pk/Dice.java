@@ -1,6 +1,5 @@
 package pk;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class Dice {
@@ -15,7 +14,6 @@ public class Dice {
 
     public static Faces[] rollN(int n) {
         Faces[] rolls = new Faces[n];
-        Random bag = new Random();
         for (int i = 0; i < n; i++) {
             rolls[i] = roll();
         }

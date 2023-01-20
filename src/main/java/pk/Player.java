@@ -19,7 +19,9 @@ public class Player {
 
         if (this.rolledDice[0] == null) { // No dice rolled yet, so roll all eight
             rolledDice = Dice.rollN(totalDice);
-        } else { // reroll specific dice
+        }
+
+        else { // reroll specific dice
             for (int i = 0; i < this.totalDice; i++) {
                 if (diceToRoll[i])
                     this.rolledDice[i] = Dice.roll();
@@ -70,5 +72,12 @@ public class Player {
             System.out.print(face + " ");
         }
         System.out.println();
+    }
+
+    public void startTurn() {
+        while (this.canRollAgain()) {
+            this.reRoll(this.selectReroll());
+            this.printRolls();
+        }
     }
 }

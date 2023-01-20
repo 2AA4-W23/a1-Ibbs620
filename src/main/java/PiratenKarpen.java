@@ -1,7 +1,3 @@
-import javax.swing.text.PlainDocument;
-
-import pk.Dice;
-import pk.Faces;
 import pk.Player;
 
 public class PiratenKarpen {
@@ -17,19 +13,13 @@ public class PiratenKarpen {
             Player P2 = new Player(8);
             System.out.println("Game " + i + " start!");
             System.out.println("Player 1 rolling...");
-            while (P1.canRollAgain()) {
-                P1.reRoll(P1.selectReroll());
-                P1.printRolls();
-            }
+            P1.startTurn();
             System.out.println("Player 1 scored " + P1.countPoints());
             System.out.println("Player 2 rolling...");
-            while (P2.canRollAgain()) {
-                P2.reRoll(P2.selectReroll());
-                P2.printRolls();
-            }
+            P2.startTurn();
             System.out.println("Player 2 scored " + P2.countPoints());
-            System.out.print("Player ");
 
+            System.out.print("Player ");
             if (P1.countPoints() > P2.countPoints()) {
                 P1Wins++;
                 System.out.println("1 wins the game");
@@ -41,6 +31,7 @@ public class PiratenKarpen {
                 ties++;
             }
         }
+
         System.out.println("-----------------------------------------------");
         double P1WinPercentage = (double) P1Wins / 42 * 100;
         double P2WinPercentage = (double) P2Wins / 42 * 100;
