@@ -1,16 +1,18 @@
 package pk;
 
-import java.util.Random;
-
 public class Player {
 
     private int totalDice = 0;
     private Faces[] rolledDice;
     private int skullsRolled = 0;
+    private Strategy strategy;
+    public final int playerNumber;
 
-    public Player(int totalDice) {
+    public Player(int totalDice, Strategy strategy, int playerNumber) {
         this.totalDice = totalDice;
+        this.strategy = strategy;
         this.rolledDice = new Faces[totalDice];
+        this.playerNumber = playerNumber;
     }
 
     public void reRoll(boolean[] diceToRoll) {
@@ -37,22 +39,6 @@ public class Player {
         }
     }
 
-    public boolean[] selectReroll() {
-        Random r = new Random();
-        boolean[] reroll = new boolean[8];
-        this.skullsRolled = 0;
-        for (int i = 0; i < this.totalDice; i++) {
-            if (this.rolledDice[i] == Faces.SKULL) {
-                reroll[i] = false;
-                this.skullsRolled++;
-            } else if (r.nextInt(2) == 1)
-                reroll[i] = true;
-            else
-                reroll[i] = false;
-        }
-        return reroll;
-    }
-
     public int countPoints() {
         int score = 0;
         for (Faces face : this.rolledDice) {
@@ -76,8 +62,12 @@ public class Player {
 
     public void startTurn() {
         while (this.canRollAgain()) {
-            this.reRoll(this.selectReroll());
+            this.reRoll(this.strategy.selectReroll(this.rolledDice));
             this.printRolls();
         }
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 }
