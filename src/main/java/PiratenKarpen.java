@@ -13,19 +13,17 @@ public class PiratenKarpen {
         int[] wins = new int[3]; // wins[0] reserved for counting ties
         for (int i = 1; i <= 42; i++) {
             boolean trace;
-            if (args.length == 0)
+            if (args.length == 0) // handles command line arguments. If none provided, default to no tracing
                 trace = false;
             else
                 trace = args[0].equals("trace") || args[0].equals("t");
 
             Game game = new Game(2, 8, trace);
             Player winner = game.playGame();
-            wins[winner.playerNumber]++;
-            for (String msg : game.getLogMessages())
-                logger.info(msg);
+            wins[winner.playerNumber]++; // increment wins for player that won
         }
 
-        System.out.println("-----------------------------------------------");
+        System.out.println("-----------------------------------------------"); // output percentages
         double P1WinPercentage = (double) wins[1] / 42 * 100;
         double P2WinPercentage = (double) wins[2] / 42 * 100;
         double tiePercentage = (double) wins[0] / 42 * 100;

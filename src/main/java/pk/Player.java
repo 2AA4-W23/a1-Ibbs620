@@ -3,6 +3,9 @@ package pk;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Player {
 
     private int totalDice = 0;
@@ -10,6 +13,7 @@ public class Player {
     private int skullsRolled = 0;
     private Strategy strategy;
     public final int playerNumber;
+    private static final Logger logger = LogManager.getRootLogger();
 
     public Player(int totalDice, Strategy strategy, int playerNumber) {
         this.totalDice = totalDice;
@@ -19,9 +23,10 @@ public class Player {
     }
 
     public void reRoll(boolean[] diceToRoll) {
-        if (!canRollAgain()) {
+        if (!canRollAgain()) { // dont roll if conditions for rerolling are not met
             return;
         }
+
         if (this.rolledDice[0] == null) { // No dice rolled yet, so roll all eight
             rolledDice = Dice.rollN(totalDice);
         } else { // reroll specific dice
@@ -36,18 +41,27 @@ public class Player {
 
     public int countPoints() {
         int score = 0;
-        for (Faces face : this.rolledDice) {
-            if (face == Faces.DIAMOND || face == Faces.GOLD)
-                score += 100;
+        int[] count = new int[6];
+        int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
+
+        for (Faces face : this.rolledDice) { // count all diamonds and gold rolled for 100 points each
+            if (face != null)
+                count[face.ordinal()]++;
         }
+        for (Faces face : Faces.values()) {
+            if (face == Faces.SKULL)
+                continue;
+            score += nOfAKindScores[count[face.ordinal()]];
+        }
+        score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
         return score;
     }
 
-    public boolean canRollAgain() {
+    public boolean canRollAgain() { // cant roll again if 3 skulls rolled
         return this.skullsRolled < 3;
     }
 
-    public String getRolls() {
+    public String getRolls() { // get a string containing dice information for logging
         String rolls = "";
         for (Faces face : this.rolledDice) {
             rolls += face + " ";
@@ -55,16 +69,18 @@ public class Player {
         return rolls;
     }
 
-    public List<String> startTurn() {
-        List<String> rollSummary = new ArrayList<>();
+    public void startTurn(boolean trace) { // carry out a turn by rerolling until 3 skulls obtained or
+                                           // no dice are randomly selected
         while (this.canRollAgain()) {
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
-            rollSummary.add(this.getRolls());
+            if (trace)
+                logger.info(this.getRolls());
         }
-        return rollSummary;
+        if (trace)
+            logger.info("PLAYER " + this.playerNumber + " SCORES " + this.countPoints() + " POINTS");
     }
 
-    public void setStrategy(Strategy strategy) {
+    public void setStrategy(Strategy strategy) { // allows for changing the players strategy mid game
         this.strategy = strategy;
     }
 }

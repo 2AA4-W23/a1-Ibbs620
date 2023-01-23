@@ -38,3 +38,6 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 |  x   | F05 | Player keeping random dice at their turn             |   D    | 01/16/23 | 01/16/23  |
 |  x   | F06 | Score points: 100 points for each diamond and gold   |   D    | 01/16/23 | 01/16/23  |
 |  x   | F07 | After 42 games, stdout win percentage of each player |   D    | 01/16/23 | 01/16/23  |
+|  x   | F08 | New combo player strategy                            |   B    |  B(F09)  |           |
+|  x   | F09 | Score points: x-of-a-kind                            |   S    | 01/23/23 |           |
+|  x   | F10 | Choose strategy from command line                    |   B    |  B(F08)  |           |

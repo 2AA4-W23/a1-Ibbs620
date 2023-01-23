@@ -3,11 +3,14 @@ package pk;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Game {
     private Player[] players;
     private int numberOfDice;
     private boolean trace;
-    private List<String> logMessages = new ArrayList<>();
+    private static final Logger logger = LogManager.getRootLogger();
 
     public Game(int numberOfPlayers, int numberOfDice, boolean trace) {
         this.numberOfDice = numberOfDice;
@@ -37,17 +40,14 @@ public class Game {
 
     public Player playGame() {
         if (trace) {
-            logMessages.add("STARTING GAME");
+            logger.info("STARTING GAME");
         }
         Player winner = new Player(0, null, 0);
         for (Player player : this.players) {
             if (trace) {
-                logMessages.add("PLAYER " + player.playerNumber + " TURN BEGINS");
+                logger.info("PLAYER " + player.playerNumber + " TURN BEGINS");
             }
-            List<String> turnSummary = player.startTurn();
-            if (trace) {
-                logMessages.addAll(turnSummary);
-            }
+            player.startTurn(trace);
             if (player.countPoints() > winner.countPoints()) {
                 winner = player;
             } else if (player.countPoints() == winner.countPoints()) {
@@ -55,15 +55,11 @@ public class Game {
             }
         }
         if (trace && winner.playerNumber != 0) {
-            logMessages.add("PLAYER " + winner.playerNumber + "WINS");
+            logger.info("PLAYER " + winner.playerNumber + " WINS");
         }
         if (trace && winner.playerNumber == 0) {
-            logMessages.add("GAME IS A TIE");
+            logger.info("GAME IS A TIE");
         }
         return winner;
-    }
-
-    public List<String> getLogMessages() {
-        return this.logMessages;
     }
 }
