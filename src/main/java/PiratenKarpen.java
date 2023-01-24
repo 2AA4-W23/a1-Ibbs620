@@ -1,26 +1,16 @@
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import pk.Game;
-import pk.Player;
+import pk.*;
 
 public class PiratenKarpen {
-
-    private static final Logger logger = LogManager.getRootLogger();
 
     public static void main(String[] args) {
         System.out.println("Welcome to Piraten Karpen Simulator!");
         int[] wins = new int[3]; // wins[0] reserved for counting ties
-        for (int i = 1; i <= 42; i++) {
-            boolean trace;
-            if (args.length == 0) // handles command line arguments. If none provided, default to no tracing
-                trace = false;
-            else
-                trace = args[0].equals("trace") || args[0].equals("t");
+        Game game = ArgumentHandler.getGame(args);
 
-            Game game = new Game(2, 8, trace);
+        for (int i = 1; i <= 42; i++) {
             Player winner = game.playGame();
             wins[winner.playerNumber]++; // increment wins for player that won
+            game.resetGame();
         }
 
         System.out.println("-----------------------------------------------"); // output percentages

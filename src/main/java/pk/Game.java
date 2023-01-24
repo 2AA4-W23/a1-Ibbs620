@@ -1,8 +1,5 @@
 package pk;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +20,10 @@ public class Game {
         this(numberOfPlayers, numberOfDice, false);
     }
 
+    public void setTrace(boolean t) {
+        this.trace = t;
+    }
+
     private void initializePlayers() {
         int playerNum = 1;
         for (int i = 0; i < this.players.length; i++) {
@@ -34,8 +35,12 @@ public class Game {
 
     public void setGameStrategy(Strategy strategy) {
         for (Player player : this.players) {
-            player.setStrategy(strategy);
+            player = new Player(this.numberOfDice, strategy, player.playerNumber);
         }
+    }
+
+    public void setPlayerStrategy(int playerNumber, Strategy strategy) {
+        this.players[playerNumber] = new Player(this.numberOfDice, strategy, playerNumber);
     }
 
     public Player playGame() {
@@ -61,5 +66,10 @@ public class Game {
             logger.info("GAME IS A TIE");
         }
         return winner;
+    }
+
+    public void resetGame() {
+        this.players = new Player[this.players.length];
+        this.initializePlayers();
     }
 }

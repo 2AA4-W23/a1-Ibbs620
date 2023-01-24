@@ -7,7 +7,6 @@ public class Player {
 
     private int totalDice = 0;
     private Faces[] rolledDice;
-    private int skullsRolled = 0;
     private Strategy strategy;
     public final int playerNumber;
     private static final Logger logger = LogManager.getRootLogger();
@@ -20,7 +19,8 @@ public class Player {
     }
 
     public void reRoll(boolean[] diceToRoll) {
-        if (!canRollAgain()) { // dont roll if conditions for rerolling are not met
+        this.strategy.printStrategy();
+        if (!this.strategy.canRollAgain(this.rolledDice)) { // dont roll if conditions for rerolling are not met
             return;
         }
 
@@ -30,8 +30,6 @@ public class Player {
             for (int i = 0; i < this.totalDice; i++) {
                 if (diceToRoll[i])
                     this.rolledDice[i] = Dice.roll();
-                if (rolledDice[i] == Faces.SKULL)
-                    skullsRolled++;
             }
         }
     }
@@ -41,7 +39,7 @@ public class Player {
         int[] count = new int[6];
         int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
 
-        for (Faces face : this.rolledDice) { // count all diamonds and gold rolled for 100 points each
+        for (Faces face : this.rolledDice) { // count all faces rolled
             if (face != null)
                 count[face.ordinal()]++;
         }
@@ -54,10 +52,6 @@ public class Player {
         return score;
     }
 
-    public boolean canRollAgain() { // cant roll again if 3 skulls rolled
-        return this.skullsRolled < 3;
-    }
-
     public String getRolls() { // get a string containing dice information for logging
         String rolls = "";
         for (Faces face : this.rolledDice) {
@@ -68,16 +62,12 @@ public class Player {
 
     public void startTurn(boolean trace) { // carry out a turn by rerolling until 3 skulls obtained or
                                            // no dice are randomly selected
-        while (this.canRollAgain()) {
+        while (this.strategy.canRollAgain(this.rolledDice)) {
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
             if (trace)
                 logger.info(this.getRolls());
         }
         if (trace)
             logger.info("PLAYER " + this.playerNumber + " SCORES " + this.countPoints() + " POINTS");
-    }
-
-    public void setStrategy(Strategy strategy) { // allows for changing the players strategy mid game
-        this.strategy = strategy;
     }
 }
