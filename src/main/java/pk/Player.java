@@ -78,7 +78,7 @@ public class Player {
             this.drawCard(deck);
             if (trace)
                 logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
-
+            this.returnCard(deck);
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
             if (trace)
                 logger.info(this.getRolls());

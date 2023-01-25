@@ -1,6 +1,7 @@
 package pk;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
     private ArrayList<Card> deck;
@@ -26,5 +27,9 @@ public class Deck {
 
     public void putBack(Card card) {
         deck.add(0, card);
+    }
+
+    public void shuffle() {
+        Collections.shuffle(deck);
     }
 }

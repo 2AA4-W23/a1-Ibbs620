@@ -15,6 +15,7 @@ public class Game {
         this.trace = trace;
         this.players = new Player[numberOfPlayers];
         this.initializePlayers();
+        deck.shuffle();
     }
 
     public Game(int numberOfPlayers, int numberOfDice) {
