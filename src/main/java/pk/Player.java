@@ -4,7 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import pk.cards.Card;
+import pk.cards.CardFaces;
 import pk.cards.Deck;
+import pk.cards.SeaBattleCard;
 import pk.dice.Dice;
 import pk.dice.Faces;
 import pk.strategy.Strategy;
@@ -18,6 +20,7 @@ public class Player {
     private int score = 0;
     private static final Logger logger = LogManager.getRootLogger();
     private Card card;
+    private int bonus = 0;
 
     public Player(int totalDice, Strategy strategy, int playerNumber) {
         this.totalDice = totalDice;
@@ -46,6 +49,16 @@ public class Player {
         this.card = deck.draw();
     }
 
+    public void calculateSeaBattleBonus(SeaBattleCard card) {
+        int sabers = 0;
+        for (Faces face : this.rolledDice) { // count all faces rolled
+            if (face == Faces.SABER)
+                sabers++;
+        }
+        if (sabers >= card.swords)
+            this.bonus = card.bonus;
+    }
+
     public void returnCard(Deck deck) {
         if (this.card == null)
             return;
@@ -68,7 +81,7 @@ public class Player {
                 continue;
             this.score += nOfAKindScores[count[face.ordinal()]];
         }
-        this.score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
+        this.score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100 + this.bonus;
     }
 
     public int getPoints() {
@@ -85,19 +98,29 @@ public class Player {
 
     public void resetRolls() {
         this.rolledDice = new Faces[this.rolledDice.length];
+        this.bonus = 0;
     }
 
     public void startTurn(boolean trace, Deck deck) { // carry out a turn by rerolling until 3 skulls obtained or
         this.drawCard(deck);
         if (trace)
             logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
-        this.returnCard(deck);
+
         while (this.strategy.canRollAgain(this.rolledDice)) {
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
+            if (this.card.face == CardFaces.SEABATTLE) {
+                if (trace)
+                    logger.info("COMMENCING SEA BATTLE - "
+                            + ((SeaBattleCard) this.card).swords + " SWORDS NEEDED FOR BONUS");
+                calculateSeaBattleBonus((SeaBattleCard) this.card);
+            }
             if (trace)
                 logger.info(this.getRolls());
         }
         this.updatePoints();
+        if (this.bonus != 0 && trace)
+            logger.info("BONUS OF " + this.bonus + " AWARDED");
+        this.returnCard(deck);
         this.resetRolls();
         if (trace)
             logger.info("PLAYER " + this.playerNumber + " HAS " + this.getPoints() + " POINTS");

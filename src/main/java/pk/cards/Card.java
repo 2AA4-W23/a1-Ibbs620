@@ -7,4 +7,8 @@ public class Card {
     public Card(CardFaces face) {
         this.face = face;
     }
+
+    public Card() {
+        this(CardFaces.NOP);
+    }
 }

@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    private ArrayList<Card> deck;
+    private ArrayList<Card> deck = new ArrayList<>();
     private int cards;
 
     public Deck() {
-        deck = new ArrayList<>();
-        this.addCards(new Card(CardFaces.NOP), 29);
-        this.addCards(new Card(CardFaces.SEABATTLE), 6);
         this.cards = 35;
+        this.initializeDeck();
+    }
+
+    private void initializeDeck() {
+        // sea battle cards
+        this.addCards(new SeaBattleCard(2, 300), 2);
+        this.addCards(new SeaBattleCard(3, 500), 2);
+        this.addCards(new SeaBattleCard(4, 1000), 2);
+        // filler cards (does nothing)
+        this.addCards(new Card(), 29);
     }
 
     private void addCards(Card card, int n) {
@@ -26,6 +33,8 @@ public class Deck {
     }
 
     public void putBack(Card card) {
+        if (card == null)
+            return;
         deck.add(0, card);
         cards++;
     }
