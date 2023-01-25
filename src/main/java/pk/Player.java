@@ -20,7 +20,7 @@ public class Player {
     }
 
     public void reRoll(boolean[] diceToRoll) {
-        this.strategy.printStrategy();
+        // this.strategy.printStrategy(); //debug
         if (!this.strategy.canRollAgain(this.rolledDice)) { // dont roll if conditions for rerolling are not met
             return;
         }

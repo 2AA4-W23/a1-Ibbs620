@@ -1,38 +1,53 @@
 package pk;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Game {
     private Player[] players;
     private int numberOfDice;
-    private boolean trace;
+    private boolean trace = false;
     private static final Logger logger = LogManager.getRootLogger();
     private Deck deck = new Deck();
+    private List<Strategy> playerStrategies;
 
-    public Game(int numberOfPlayers, int numberOfDice, boolean trace) {
+    public Game(int numberOfPlayers, int numberOfDice) {
         this.numberOfDice = numberOfDice;
-        this.trace = trace;
         this.players = new Player[numberOfPlayers];
         this.initializePlayers();
         deck.shuffle();
     }
 
-    public Game(int numberOfPlayers, int numberOfDice) {
-        this(numberOfPlayers, numberOfDice, false);
+    public Game(int numberOfPlayers, int numberOfDice, List<Strategy> playerStrategies) {
+        this.numberOfDice = numberOfDice;
+        this.players = new Player[numberOfPlayers];
+        this.playerStrategies = playerStrategies;
+        this.initializePlayers(playerStrategies);
+        deck.shuffle();
+
     }
 
     public void setTrace(boolean t) {
         this.trace = t;
     }
 
-    private void initializePlayers() {
-        int playerNum = 1;
+    private void initializePlayers(List<Strategy> playerStrategies) {
         for (int i = 0; i < this.players.length; i++) {
-            Strategy strategy = new RandomStrategy();
-            this.players[i] = new Player(this.numberOfDice, strategy, playerNum);
-            playerNum++;
+            this.players[i] = new Player(this.numberOfDice, playerStrategies.get(i), i + 1);
         }
+    }
+
+    private void initializePlayers() {
+        List<Strategy> playerStrategies = new ArrayList<>();
+        for (int i = 0; i < this.players.length; i++) {
+            Strategy s = new RandomStrategy();
+            playerStrategies.add(s);
+        }
+        this.playerStrategies = playerStrategies;
+        this.initializePlayers(playerStrategies);
     }
 
     public void setGameStrategy(Strategy strategy) {
@@ -72,7 +87,7 @@ public class Game {
 
     public void resetGame() {
         this.players = new Player[this.players.length];
-        this.initializePlayers();
+        this.initializePlayers(playerStrategies);
         this.deck = new Deck();
     }
 }
