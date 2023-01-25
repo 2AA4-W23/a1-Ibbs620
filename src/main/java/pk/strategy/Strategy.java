@@ -1,4 +1,6 @@
-package pk;
+package pk.strategy;
+
+import pk.Faces;
 
 public interface Strategy {
     public boolean[] selectReroll(Faces[] rolls);

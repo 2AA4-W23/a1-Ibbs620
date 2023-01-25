@@ -1,4 +1,4 @@
-package pk;
+package pk.cards;
 
 public enum CardFaces {
     NOP, SEABATTLE

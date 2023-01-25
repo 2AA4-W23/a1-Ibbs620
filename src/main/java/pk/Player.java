@@ -3,6 +3,10 @@ package pk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import pk.cards.Card;
+import pk.cards.Deck;
+import pk.strategy.Strategy;
+
 public class Player {
 
     private int totalDice = 0;

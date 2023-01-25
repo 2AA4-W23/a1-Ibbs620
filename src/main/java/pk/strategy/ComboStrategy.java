@@ -1,4 +1,6 @@
-package pk;
+package pk.strategy;
+
+import pk.Faces;
 
 public class ComboStrategy implements Strategy {
 

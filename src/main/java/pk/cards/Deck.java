@@ -1,4 +1,4 @@
-package pk;
+package pk.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;

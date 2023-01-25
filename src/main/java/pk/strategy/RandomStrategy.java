@@ -1,6 +1,8 @@
-package pk;
+package pk.strategy;
 
 import java.util.Random;
+
+import pk.Faces;
 
 public class RandomStrategy implements Strategy {
 
