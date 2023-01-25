@@ -27,9 +27,14 @@ public class Deck {
 
     public void putBack(Card card) {
         deck.add(0, card);
+        cards++;
     }
 
     public void shuffle() {
         Collections.shuffle(deck);
+    }
+
+    public int size() {
+        return this.cards;
     }
 }

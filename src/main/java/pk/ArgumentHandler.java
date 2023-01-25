@@ -21,8 +21,8 @@ public class ArgumentHandler {
                 playerStrategies.add(s);
             } else {
                 System.out
-                        .println("Strategy " + args[1] + " not found, players will be set to random.");
-                s = new RandomStrategy();
+                        .println("Strategy " + args[1] + " not found, players will be set to combo.");
+                s = new ComboStrategy();
                 playerStrategies.add(s);
                 playerStrategies.add(s);
             }
@@ -31,7 +31,6 @@ public class ArgumentHandler {
             List<Strategy> playerStrategies = new ArrayList<>();
             for (int j = 1; j < args.length; j++) {
                 if (args[j].toLowerCase().equals("combo")) {
-                    System.out.println("combo");
                     Strategy s = new ComboStrategy();
                     playerStrategies.add(s);
                 } else if (args[j].toLowerCase().equals("random")) {

@@ -2,7 +2,6 @@ package pk;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,7 +42,7 @@ public class Game {
     private void initializePlayers() {
         List<Strategy> playerStrategies = new ArrayList<>();
         for (int i = 0; i < this.players.length; i++) {
-            Strategy s = new RandomStrategy();
+            Strategy s = new ComboStrategy();
             playerStrategies.add(s);
         }
         this.playerStrategies = playerStrategies;
@@ -61,28 +60,42 @@ public class Game {
     }
 
     public Player playGame() {
+        boolean lastRound = false;
         if (trace) {
             logger.info("STARTING GAME");
         }
         Player winner = new Player(0, null, 0);
-        for (Player player : this.players) {
-            if (trace) {
-                logger.info("PLAYER " + player.playerNumber + " TURN BEGINS");
+        Player firstTo6000 = new Player(0, null, 0);
+        while (true) {
+            for (Player player : this.players) {
+                if (firstTo6000.playerNumber == player.playerNumber) {
+                    // end game if round comes back to player that hit 6000 points first
+                    if (trace && winner.playerNumber != 0) {
+                        logger.info("PLAYER " + winner.playerNumber + " WINS");
+                    }
+                    if (trace && winner.playerNumber == 0) {
+                        logger.info("GAME IS A TIE");
+                    }
+                    return winner;
+                }
+                if (trace) {
+                    logger.info("PLAYER " + player.playerNumber + " TURN BEGINS");
+                }
+                player.startTurn(trace, deck);
+                if (lastRound) {
+                    if (player.getPoints() > winner.getPoints()) {
+                        winner = player;
+                    } else if (player.getPoints() == winner.getPoints()) {
+                        winner = new Player(0, null, 0);
+                    }
+                }
+                if (player.getPoints() >= 6000 && !lastRound) {
+                    lastRound = true;
+                    firstTo6000 = player;
+                    winner = player;
+                }
             }
-            player.startTurn(trace, deck);
-            if (player.countPoints() > winner.countPoints()) {
-                winner = player;
-            } else if (player.countPoints() == winner.countPoints()) {
-                winner = new Player(0, null, 0);
-            }
         }
-        if (trace && winner.playerNumber != 0) {
-            logger.info("PLAYER " + winner.playerNumber + " WINS");
-        }
-        if (trace && winner.playerNumber == 0) {
-            logger.info("GAME IS A TIE");
-        }
-        return winner;
     }
 
     public void resetGame() {

@@ -9,6 +9,7 @@ public class Player {
     private Faces[] rolledDice;
     private Strategy strategy;
     public final int playerNumber;
+    private int score = 0;
     private static final Logger logger = LogManager.getRootLogger();
     private Card card;
 
@@ -46,8 +47,7 @@ public class Player {
         this.card = null;
     }
 
-    public int countPoints() {
-        int score = 0;
+    private void updatePoints() {
         int[] count = new int[6];
         int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
 
@@ -55,13 +55,18 @@ public class Player {
             if (face != null)
                 count[face.ordinal()]++;
         }
+        if (count[Faces.SKULL.ordinal()] >= 3) // no points scored if 3 skulls rolled
+            return;
         for (Faces face : Faces.values()) {
             if (face == Faces.SKULL)
                 continue;
-            score += nOfAKindScores[count[face.ordinal()]];
+            this.score += nOfAKindScores[count[face.ordinal()]];
         }
-        score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
-        return score;
+        this.score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
+    }
+
+    public int getPoints() {
+        return this.score;
     }
 
     public String getRolls() { // get a string containing dice information for logging
@@ -72,18 +77,23 @@ public class Player {
         return rolls;
     }
 
+    public void resetRolls() {
+        this.rolledDice = new Faces[this.rolledDice.length];
+    }
+
     public void startTurn(boolean trace, Deck deck) { // carry out a turn by rerolling until 3 skulls obtained or
-        // no dice are randomly selected
+        this.drawCard(deck);
+        if (trace)
+            logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
+        this.returnCard(deck);
         while (this.strategy.canRollAgain(this.rolledDice)) {
-            this.drawCard(deck);
-            if (trace)
-                logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
-            this.returnCard(deck);
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
             if (trace)
                 logger.info(this.getRolls());
         }
+        this.updatePoints();
+        this.resetRolls();
         if (trace)
-            logger.info("PLAYER " + this.playerNumber + " SCORES " + this.countPoints() + " POINTS");
+            logger.info("PLAYER " + this.playerNumber + " HAS " + this.getPoints() + " POINTS");
     }
 }
