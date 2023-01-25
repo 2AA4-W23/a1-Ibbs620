@@ -1,4 +1,4 @@
-package pk;
+package pk.dice;
 
 import java.util.Random;
 

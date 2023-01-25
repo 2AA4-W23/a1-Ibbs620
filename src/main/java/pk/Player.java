@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import pk.cards.Card;
 import pk.cards.Deck;
+import pk.dice.Dice;
+import pk.dice.Faces;
 import pk.strategy.Strategy;
 
 public class Player {

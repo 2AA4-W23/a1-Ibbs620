@@ -2,7 +2,7 @@ package pk.strategy;
 
 import java.util.Random;
 
-import pk.Faces;
+import pk.dice.Faces;
 
 public class RandomStrategy implements Strategy {
 
