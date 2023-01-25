@@ -8,6 +8,7 @@ public class Game {
     private int numberOfDice;
     private boolean trace;
     private static final Logger logger = LogManager.getRootLogger();
+    private Deck deck = new Deck();
 
     public Game(int numberOfPlayers, int numberOfDice, boolean trace) {
         this.numberOfDice = numberOfDice;
@@ -52,7 +53,7 @@ public class Game {
             if (trace) {
                 logger.info("PLAYER " + player.playerNumber + " TURN BEGINS");
             }
-            player.startTurn(trace);
+            player.startTurn(trace, deck);
             if (player.countPoints() > winner.countPoints()) {
                 winner = player;
             } else if (player.countPoints() == winner.countPoints()) {
@@ -71,5 +72,6 @@ public class Game {
     public void resetGame() {
         this.players = new Player[this.players.length];
         this.initializePlayers();
+        this.deck = new Deck();
     }
 }

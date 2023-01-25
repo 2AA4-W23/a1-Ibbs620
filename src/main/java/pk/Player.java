@@ -10,6 +10,7 @@ public class Player {
     private Strategy strategy;
     public final int playerNumber;
     private static final Logger logger = LogManager.getRootLogger();
+    private Card card;
 
     public Player(int totalDice, Strategy strategy, int playerNumber) {
         this.totalDice = totalDice;
@@ -32,6 +33,17 @@ public class Player {
                     this.rolledDice[i] = Dice.roll();
             }
         }
+    }
+
+    public void drawCard(Deck deck) {
+        this.card = deck.draw();
+    }
+
+    public void returnCard(Deck deck) {
+        if (this.card == null)
+            return;
+        deck.putBack(this.card);
+        this.card = null;
     }
 
     public int countPoints() {
@@ -60,9 +72,13 @@ public class Player {
         return rolls;
     }
 
-    public void startTurn(boolean trace) { // carry out a turn by rerolling until 3 skulls obtained or
-                                           // no dice are randomly selected
+    public void startTurn(boolean trace, Deck deck) { // carry out a turn by rerolling until 3 skulls obtained or
+        // no dice are randomly selected
         while (this.strategy.canRollAgain(this.rolledDice)) {
+            this.drawCard(deck);
+            if (trace)
+                logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
+
             this.reRoll(this.strategy.selectReroll(this.rolledDice));
             if (trace)
                 logger.info(this.getRolls());
