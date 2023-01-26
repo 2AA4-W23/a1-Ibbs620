@@ -12,9 +12,9 @@
 - To run the project in development mode:
   - `mvn -q exec:java` (here, `-q` tells maven to be _quiet_)
 - To run the project with log messages:
-  `mvn -q exec:java -Dexec.args="t"`
+  - `mvn -q exec:java -Dexec.args="t"`
 - To change player strategies (random or combo):
-  `mvn -q exec:java -Dexec.args="<trace> <p1strat> <p2strat>"`
+  - `mvn -q exec:java -Dexec.args="<trace> <p1strat> <p2strat>"`
 - To package the project as a turn-key artefact:
   - `mvn package`
 - To run the packaged delivery:
