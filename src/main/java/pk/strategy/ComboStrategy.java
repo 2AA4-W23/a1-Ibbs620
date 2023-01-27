@@ -1,5 +1,6 @@
 package pk.strategy;
 
+import pk.cards.Card;
 import pk.dice.Faces;
 
 public class ComboStrategy implements Strategy {
@@ -25,7 +26,7 @@ public class ComboStrategy implements Strategy {
     }
 
     @Override
-    public boolean canRollAgain(Faces[] rolls) {
+    public boolean canRollAgain(Faces[] rolls, Card card) {
         int[] count = new int[6];
         if (rolls[0] == null)
             return true;

@@ -2,6 +2,7 @@ package pk.strategy;
 
 import java.util.Random;
 
+import pk.cards.Card;
 import pk.dice.Faces;
 
 public class RandomStrategy implements Strategy {
@@ -22,7 +23,7 @@ public class RandomStrategy implements Strategy {
     }
 
     @Override
-    public boolean canRollAgain(Faces[] rolls) {
+    public boolean canRollAgain(Faces[] rolls, Card card) {
         int[] count = new int[6];
         for (Faces face : rolls) { // count all diamonds and gold rolled for 100 points each
             if (face != null)

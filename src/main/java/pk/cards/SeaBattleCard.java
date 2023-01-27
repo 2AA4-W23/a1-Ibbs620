@@ -5,8 +5,12 @@ public class SeaBattleCard extends Card {
     public final int bonus;
 
     public SeaBattleCard(int swords, int bonus) {
-        super(CardFaces.SEABATTLE);
         this.swords = swords;
         this.bonus = bonus;
+    }
+
+    @Override
+    public String toString() {
+        return "SEA BATTLE: " + this.swords + " SWORDS, " + this.bonus + " BONUS";
     }
 }

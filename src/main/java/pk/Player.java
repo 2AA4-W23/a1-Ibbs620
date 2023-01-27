@@ -4,11 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import pk.cards.Card;
-import pk.cards.CardFaces;
 import pk.cards.Deck;
 import pk.cards.SeaBattleCard;
 import pk.dice.Dice;
 import pk.dice.Faces;
+import pk.strategy.SeaBattleStrategy;
 import pk.strategy.Strategy;
 
 public class Player {
@@ -29,15 +29,16 @@ public class Player {
         this.playerNumber = playerNumber;
     }
 
-    public void reRoll(boolean[] diceToRoll) {
+    public void reRoll(Strategy turnStrategy) {
         // this.strategy.printStrategy(); //debug
-        if (!this.strategy.canRollAgain(this.rolledDice)) { // dont roll if conditions for rerolling are not met
+        if (!turnStrategy.canRollAgain(this.rolledDice, this.card)) {
+            // dont roll if conditions for rerolling are not met
             return;
         }
-
+        boolean[] diceToRoll = turnStrategy.selectReroll(this.rolledDice);
         if (this.rolledDice[0] == null) { // No dice rolled yet, so roll all eight
             rolledDice = Dice.rollN(totalDice);
-        } else { // reroll specific dice
+        } else { // reroll specific dice. determined by strategy
             for (int i = 0; i < this.totalDice; i++) {
                 if (diceToRoll[i])
                     this.rolledDice[i] = Dice.roll();
@@ -104,16 +105,17 @@ public class Player {
     public void startTurn(boolean trace, Deck deck) { // carry out a turn by rerolling until 3 skulls obtained or
         this.drawCard(deck);
         if (trace)
-            logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.face);
+            logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.toString());
 
-        while (this.strategy.canRollAgain(this.rolledDice)) {
-            this.reRoll(this.strategy.selectReroll(this.rolledDice));
-            if (this.card.face == CardFaces.SEABATTLE) {
-                if (trace)
-                    logger.info("COMMENCING SEA BATTLE - "
-                            + ((SeaBattleCard) this.card).swords + " SWORDS NEEDED FOR BONUS");
-                calculateSeaBattleBonus((SeaBattleCard) this.card);
-            }
+        Strategy turnStrategy;
+        if (this.card instanceof SeaBattleCard) {
+            turnStrategy = new SeaBattleStrategy();
+        } else {
+            turnStrategy = this.strategy;
+        }
+
+        while (turnStrategy.canRollAgain(this.rolledDice, this.card)) {
+            this.reRoll(turnStrategy);
             if (trace)
                 logger.info(this.getRolls());
         }
