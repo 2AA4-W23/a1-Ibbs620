@@ -39,9 +39,29 @@ public class SeaBattleStrategy implements Strategy {
     }
 
     @Override
-    public void printStrategy() {
-        // TODO Auto-generated method stub
+    public int countPoints(Faces[] rolls, Card card) {
+        int[] count = new int[6];
+        int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
+        int score = 0;
+        int sabers = 0;
 
+        for (Faces face : rolls) { // count all faces rolled
+            if (face != null)
+                count[face.ordinal()]++;
+            if (face == Faces.SABER)
+                sabers++;
+        }
+        if (count[Faces.SKULL.ordinal()] >= 3) // no points scored if 3 skulls rolled
+            return 0;
+        for (Faces face : Faces.values()) {
+            if (face == Faces.SKULL)
+                continue;
+            score += nOfAKindScores[count[face.ordinal()]];
+        }
+        score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
+        if (((SeaBattleCard) card).swords <= sabers)
+            score += ((SeaBattleCard) card).bonus;
+        return score;
     }
 
 }

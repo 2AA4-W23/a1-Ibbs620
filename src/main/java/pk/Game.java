@@ -21,7 +21,6 @@ public class Game {
         this.numberOfDice = numberOfDice;
         this.players = new Player[numberOfPlayers];
         this.initializePlayers();
-        deck.shuffle();
     }
 
     public Game(int numberOfPlayers, int numberOfDice, List<Strategy> playerStrategies) {
@@ -29,7 +28,6 @@ public class Game {
         this.players = new Player[numberOfPlayers];
         this.playerStrategies = playerStrategies;
         this.initializePlayers(playerStrategies);
-        deck.shuffle();
 
     }
 

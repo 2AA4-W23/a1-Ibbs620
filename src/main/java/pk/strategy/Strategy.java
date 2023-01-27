@@ -8,5 +8,5 @@ public interface Strategy {
 
     public boolean canRollAgain(Faces[] rolls, Card card);
 
-    public void printStrategy();
+    public int countPoints(Faces[] rolls, Card card);
 }

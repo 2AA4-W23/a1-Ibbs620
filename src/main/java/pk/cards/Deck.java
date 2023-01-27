@@ -2,9 +2,10 @@ package pk.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Deck {
-    private ArrayList<Card> deck = new ArrayList<>();
+    private List<Card> deck = new ArrayList<>();
     private int cards;
 
     public Deck() {
@@ -17,8 +18,11 @@ public class Deck {
         this.addCards(new SeaBattleCard(2, 300), 2);
         this.addCards(new SeaBattleCard(3, 500), 2);
         this.addCards(new SeaBattleCard(4, 1000), 2);
+        // monkey business cards
+        this.addCards(new MonkeyBusinessCard(), 4);
         // filler cards (does nothing)
         this.addCards(new Card(), 29);
+        this.shuffle();
     }
 
     private void addCards(Card card, int n) {
@@ -43,7 +47,11 @@ public class Deck {
         Collections.shuffle(deck);
     }
 
-    public int size() {
-        return this.cards;
+    public String peekDeck(int n) {
+        String contents = "";
+        for (int i = 1; i <= n; i++) {
+            contents += deck.get(cards - i).toString() + " | ";
+        }
+        return contents;
     }
 }

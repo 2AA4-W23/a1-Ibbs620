@@ -5,9 +5,11 @@ import org.apache.logging.log4j.Logger;
 
 import pk.cards.Card;
 import pk.cards.Deck;
+import pk.cards.MonkeyBusinessCard;
 import pk.cards.SeaBattleCard;
 import pk.dice.Dice;
 import pk.dice.Faces;
+import pk.strategy.MonkeyBusinessStrategy;
 import pk.strategy.SeaBattleStrategy;
 import pk.strategy.Strategy;
 
@@ -20,7 +22,6 @@ public class Player {
     private int score = 0;
     private static final Logger logger = LogManager.getRootLogger();
     private Card card;
-    private int bonus = 0;
 
     public Player(int totalDice, Strategy strategy, int playerNumber) {
         this.totalDice = totalDice;
@@ -50,39 +51,11 @@ public class Player {
         this.card = deck.draw();
     }
 
-    public void calculateSeaBattleBonus(SeaBattleCard card) {
-        int sabers = 0;
-        for (Faces face : this.rolledDice) { // count all faces rolled
-            if (face == Faces.SABER)
-                sabers++;
-        }
-        if (sabers >= card.swords)
-            this.bonus = card.bonus;
-    }
-
     public void returnCard(Deck deck) {
         if (this.card == null)
             return;
         deck.putBack(this.card);
         this.card = null;
-    }
-
-    private void updatePoints() {
-        int[] count = new int[6];
-        int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
-
-        for (Faces face : this.rolledDice) { // count all faces rolled
-            if (face != null)
-                count[face.ordinal()]++;
-        }
-        if (count[Faces.SKULL.ordinal()] >= 3) // no points scored if 3 skulls rolled
-            return;
-        for (Faces face : Faces.values()) {
-            if (face == Faces.SKULL)
-                continue;
-            this.score += nOfAKindScores[count[face.ordinal()]];
-        }
-        this.score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100 + this.bonus;
     }
 
     public int getPoints() {
@@ -99,29 +72,31 @@ public class Player {
 
     public void resetRolls() {
         this.rolledDice = new Faces[this.rolledDice.length];
-        this.bonus = 0;
+    }
+
+    private Strategy selectStrategy(Card card) {
+        if (card instanceof SeaBattleCard)
+            return new SeaBattleStrategy();
+        if (card instanceof MonkeyBusinessCard)
+            return new MonkeyBusinessStrategy();
+        return this.strategy;
     }
 
     public void startTurn(boolean trace, Deck deck) { // carry out a turn by rerolling until 3 skulls obtained or
+        if (trace)
+            logger.info("FIRST 5 CARDS IN DECK: " + deck.peekDeck(5));
         this.drawCard(deck);
         if (trace)
             logger.info("PLAYER " + this.playerNumber + " DRAWS " + this.card.toString());
 
-        Strategy turnStrategy;
-        if (this.card instanceof SeaBattleCard) {
-            turnStrategy = new SeaBattleStrategy();
-        } else {
-            turnStrategy = this.strategy;
-        }
+        Strategy turnStrategy = selectStrategy(this.card);
 
         while (turnStrategy.canRollAgain(this.rolledDice, this.card)) {
             this.reRoll(turnStrategy);
             if (trace)
                 logger.info(this.getRolls());
         }
-        this.updatePoints();
-        if (this.bonus != 0 && trace)
-            logger.info("BONUS OF " + this.bonus + " AWARDED");
+        this.score += turnStrategy.countPoints(this.rolledDice, this.card);
         this.returnCard(deck);
         this.resetRolls();
         if (trace)
