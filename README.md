@@ -46,4 +46,4 @@ Remark: **We are assuming here you are using a _real_ shell (e.g., anything but 
 |      | F11 | Draw a card from a deck every turn and apply effects |   D    | 01/24/23 | 01/24/23  |
 |      | F12 | Shuffle card deck                                    |   D    | 01/24/23 | 01/24/23  |
 |      | F13 | Sea Battle card                                      |   D    | 01/24/23 | 01/25/23  |
-|      | F14 | Monkey Business card and strategy                    |   S    | 01/27/23 |           |
+|      | F14 | Monkey Business card and strategy                    |   D    | 01/27/23 | 01/27/23  |
