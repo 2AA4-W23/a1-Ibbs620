@@ -14,7 +14,7 @@ public class MonkeyBusinessStrategy implements Strategy {
             } else if (rolls[i] == Faces.SKULL) {
                 reroll[i] = false; // cant reroll skulls
             } else {
-                reroll[i] = true;
+                reroll[i] = true; // reroll everything else
             }
         }
         return reroll;
@@ -26,7 +26,7 @@ public class MonkeyBusinessStrategy implements Strategy {
         int skulls = 0;
         if (rolls[0] == null)
             return true;
-        for (Faces face : rolls) {
+        for (Faces face : rolls) { // count all parrots, monkeys, and skulls
             if (face == Faces.MONKEY || face == Faces.PARROT)
                 monkeysAndParrots++;
             if (face == Faces.SKULL)
@@ -44,6 +44,7 @@ public class MonkeyBusinessStrategy implements Strategy {
     public int countPoints(Faces[] rolls, Card card) {
         int[] count = new int[6];
         int[] nOfAKindScores = { 0, 0, 0, 100, 200, 500, 1000, 2000, 4000 };
+        // scoring for n of a kind where index is number of occurences of the face
         int monkeysAndParrots;
         int score = 0;
 
@@ -56,13 +57,15 @@ public class MonkeyBusinessStrategy implements Strategy {
         monkeysAndParrots = count[Faces.MONKEY.ordinal()] + count[Faces.PARROT.ordinal()];
         score += nOfAKindScores[monkeysAndParrots];
         for (Faces face : Faces.values()) {
-            if (face == Faces.SKULL)
+            if (face == Faces.SKULL) // dont process skulls
                 continue;
             if (face == Faces.MONKEY || face == Faces.PARROT)
+                // skip counting monkeys and parrots as their score is calculated seperately
                 continue;
             score += nOfAKindScores[count[face.ordinal()]];
         }
-        score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100;
+        score += (count[Faces.DIAMOND.ordinal()] + count[Faces.GOLD.ordinal()]) * 100; // add 100 for every diamond and
+                                                                                       // gold
         return score;
     }
 

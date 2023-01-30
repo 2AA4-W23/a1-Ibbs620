@@ -4,11 +4,11 @@ public class PiratenKarpen {
 
     public static void main(String[] args) {
         System.out.println("Welcome to Piraten Karpen Simulator!");
-        int[] wins = new int[3]; // wins[0] reserved for counting ties
-        Game game = ArgumentHandler.getGame(args);
+        int[] wins = new int[3]; // wins[0] reserved for counting ties. otherwise index equals player number
+        Game game = ArgumentHandler.getGame(args); // initialize a game based on provided arguments
 
         for (int i = 1; i <= 42; i++) {
-            Player winner = game.playGame();
+            Player winner = game.playGame(); // get winner from playing a game
             wins[winner.playerNumber]++; // increment wins for player that won
             game.resetGame();
         }

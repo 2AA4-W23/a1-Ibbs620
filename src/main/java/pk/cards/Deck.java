@@ -13,19 +13,21 @@ public class Deck {
         this.initializeDeck();
     }
 
-    private void initializeDeck() {
+    private void initializeDeck() { // add all cards to deck
         // sea battle cards
         this.addCards(new SeaBattleCard(2, 300), 2);
         this.addCards(new SeaBattleCard(3, 500), 2);
         this.addCards(new SeaBattleCard(4, 1000), 2);
         // monkey business cards
         this.addCards(new MonkeyBusinessCard(), 4);
+        // sorceress cards
+        this.addCards(new SorceressCard(), 4);
         // filler cards (does nothing)
         this.addCards(new Card(), 29);
-        this.shuffle();
+        this.shuffle(); // shuffles deck
     }
 
-    private void addCards(Card card, int n) {
+    private void addCards(Card card, int n) { // adds n cards to top of deck
         for (int i = 0; i < n; i++)
             deck.add(card);
     }
@@ -36,20 +38,20 @@ public class Deck {
         return drawn;
     }
 
-    public void putBack(Card card) {
-        if (card == null)
+    public void putBack(Card card) { // return card to bottom of deck
+        if (card == null) // dont add null entries
             return;
-        deck.add(0, card);
+        deck.add(0, card); // add to beginning of arraylist (bottom of deck)
         cards++;
     }
 
-    public void shuffle() {
+    public void shuffle() { // shuffles deck
         Collections.shuffle(deck);
     }
 
-    public String peekDeck(int n) {
+    public String peekDeck(int n) { // shows the first 5 cards in deck for debug
         String contents = "";
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= n; i++) { // build a string containing the string representations of the cards
             contents += deck.get(cards - i).toString() + " | ";
         }
         return contents;
